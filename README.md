@@ -17,16 +17,16 @@ This project is designed to build an AI agent that, given a task description (e.
    git clone https://github.com/ruxiao/Structured-Prompt.git
 2. Create and activate a Python virtual environment:
    ```bash
-python -m venv venv
-source venv/bin/activate   # For Linux/Mac
-venv\Scripts\activate      # For Windows
+      python -m venv venv
+      source venv/bin/activate #For Linux/Mac
+      venv\Scripts\activate #For WIndows
+
 3. Install dependencies
-pip install -r requirements.txt
+   ```bash
+      pip install -r requirements.txt
+
 4.Run the agent (for example, for the task "TTS singing imitation"):
+   ```bash
+      python main.py --task "TTS singing imitation"
 
-python main.py --task "TTS singing imitation"
 
-
-Contribution
-
----
