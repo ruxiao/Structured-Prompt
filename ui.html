@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>RL Agent Web UI</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <style>
+    body {
+      padding-top: 50px;
+    }
+    .container {
+      max-width: 600px;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2 class="text-center">RL Agent Web UI</h2>
+  <form id="rlForm">
+    <!-- 上传文件 -->
+    <div class="form-group section">
+      <label for="fileInput">上传文件</label>
+      <input type="file" class="form-control-file" id="fileInput" name="file">
+    </div>
+    <!-- 可选的GitHub仓库链接 -->
+    <div class="form-group section">
+      <label for="repoInput">GitHub 仓库链接 (可选)</label>
+      <input type="text" class="form-control" id="repoInput" name="repo" placeholder="请输入GitHub仓库链接">
+    </div>
+    <!-- Prompt输入 -->
+    <div class="form-group section">
+      <label for="promptInput">Prompt</label>
+      <textarea class="form-control" id="promptInput" name="prompt" rows="4" placeholder="请输入发送给LLM的Prompt"></textarea>
+    </div>
+    <!-- API Key输入 -->
+    <div class="form-group section">
+      <label for="apiKeyInput">LLM API Key</label>
+      <input type="text" class="form-control" id="apiKeyInput" name="apiKey" placeholder="请输入LLM API Key">
+    </div>
+    <!-- 提交按钮 -->
+    <button type="submit" class="btn btn-primary btn-block">提交</button>
+  </form>
+  <div id="response" class="mt-4"></div>
+</div>
+
+<script>
+  document.getElementById('rlForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    const fileInput = document.getElementById('fileInput');
+    const repoInput = document.getElementById('repoInput').value;
+    const promptInput = document.getElementById('promptInput').value;
+    const apiKeyInput = document.getElementById('apiKeyInput').value;
+
+    // 如果选择了文件，则加入FormData
+    if (fileInput.files.length > 0) {
+      formData.append('file', fileInput.files[0]);
+    }
+    formData.append('repo', repoInput);
+    formData.append('prompt', promptInput);
+    formData.append('apiKey', apiKeyInput);
+
+    // 发送POST请求到后端接口
+    fetch('/api/submit', {  // 请确保此处的URL与后端接口匹配
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('response').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+    })
+    .catch(error => {
+      document.getElementById('response').innerHTML = '<pre>' + error.toString() + '</pre>';
+    });
+  });
+</script>
+</body>
+</html>
